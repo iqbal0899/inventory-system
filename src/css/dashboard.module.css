@@ -1,0 +1,254 @@
+.appLayout {
+  display: flex;
+  min-height: 100vh;
+  background: #f7f8fa;
+}
+
+.mainWrapper {
+  width: calc(100% - 250px);
+  margin-left: 250px;
+}
+
+.dashboard {
+  padding: 30px;
+}
+
+.pageHeading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 25px;
+}
+
+.pageHeading h1 {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.pageHeading p {
+  margin-top: 5px;
+  color: #8b93a4;
+  font-size: 12px;
+}
+
+.dateButton {
+  padding: 9px 13px;
+  border: 1px solid #e1e5eb;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #596276;
+  font-size: 11px;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.contentGrid {
+  display: grid;
+  grid-template-columns: 1.55fr 1fr;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.chartCard,
+.lowStockCard,
+.tableCard {
+  background: #ffffff;
+  border: 1px solid #e8ebf0;
+  border-radius: 10px;
+}
+
+.chartCard {
+  min-height: 315px;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 19px;
+}
+
+.cardHeader h3 {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.cardHeader p {
+  margin-top: 4px;
+  color: #9299a9;
+  font-size: 10px;
+}
+
+.cardHeader select {
+  padding: 7px 9px;
+  border: 1px solid #e3e6ec;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #697386;
+  font-size: 10px;
+}
+
+.chart {
+  height: 225px;
+  padding: 20px;
+}
+
+.chartBars {
+  height: 170px;
+  display: flex;
+  align-items: end;
+  justify-content: space-around;
+  border-bottom: 1px solid #edf0f4;
+}
+
+.barWrapper {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  align-items: center;
+  gap: 8px;
+}
+
+.bar {
+  width: 28px;
+  border-radius: 5px 5px 0 0;
+  background: #2563eb;
+  transition: 0.2s;
+}
+
+.bar:hover {
+  background: #1d4ed8;
+}
+
+.barWrapper span {
+  position: relative;
+  top: 28px;
+  color: #a0a7b5;
+  font-size: 9px;
+}
+
+.viewAllButton {
+  border: 0;
+  background: transparent;
+  color: #2563eb;
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.tableCard {
+  margin-top: 16px;
+  overflow: hidden;
+}
+
+.tableWrapper {
+  overflow-x: auto;
+}
+
+.tableWrapper table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tableWrapper th {
+  padding: 11px 19px;
+  background: #fafbfc;
+  color: #9299a9;
+  font-size: 9px;
+  font-weight: 600;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.tableWrapper td {
+  padding: 13px 19px;
+  border-top: 1px solid #f0f1f4;
+  color: #596276;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.tableWrapper td strong {
+  color: #293247;
+  font-size: 10px;
+}
+
+.status {
+  display: inline-flex;
+  padding: 4px 7px;
+  border-radius: 5px;
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.pending {
+  background: #fff7ed;
+  color: #ea580c;
+}
+
+.accepted {
+  background: #ecfdf5;
+  color: #059669;
+}
+
+.rejected {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.detailButton {
+  padding: 5px 9px;
+  border: 1px solid #e1e5eb;
+  border-radius: 5px;
+  background: #ffffff;
+  color: #596276;
+  font-size: 9px;
+  cursor: pointer;
+}
+
+.detailButton:hover {
+  border-color: #2563eb;
+  color: #2563eb;
+}
+
+@media (max-width: 1100px) {
+  .statsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .contentGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .mainWrapper {
+    width: calc(100% - 70px);
+    margin-left: 70px;
+  }
+
+  .dashboard {
+    padding: 20px;
+  }
+
+  .pageHeading {
+    align-items: flex-start;
+    gap: 15px;
+  }
+}
+
+@media (max-width: 550px) {
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .dateButton {
+    display: none;
+  }
+}
+

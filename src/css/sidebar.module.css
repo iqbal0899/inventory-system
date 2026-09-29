@@ -1,0 +1,187 @@
+.sidebar {
+  width: 250px;
+  min-height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+
+  background: #ffffff;
+  border-right: 1px solid #e8ebf0;
+
+  display: flex;
+  flex-direction: column;
+  padding: 22px 14px;
+
+  z-index: 20;
+}
+
+.sidebarBrand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 4px 10px 28px;
+}
+
+.brandIcon {
+  width: 39px;
+  height: 39px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  background: #2563eb;
+  color: #ffffff;
+
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.sidebarBrand h2 {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.sidebarBrand span {
+  display: block;
+  margin-top: 2px;
+
+  color: #8b93a7;
+  font-size: 11px;
+}
+
+.menuSection {
+  flex: 1;
+}
+
+.menuTitle {
+  padding: 0 11px 10px;
+
+  color: #a0a7b7;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.sidebarMenu {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.menuItem {
+  width: 100%;
+  height: 43px;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  border: 0;
+  border-radius: 8px;
+
+  background: transparent;
+  color: #687186;
+
+  padding: 0 11px;
+
+  font-size: 13px;
+  text-align: left;
+
+  transition: 0.2s ease;
+}
+
+.menuItem:hover {
+  background: #f4f6fa;
+  color: #172033;
+}
+
+.active {
+  background: #eff5ff;
+  color: #2563eb;
+  font-weight: 600;
+}
+
+.menuBadge {
+  margin-left: auto;
+
+  min-width: 22px;
+  height: 21px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 6px;
+
+  background: #2563eb;
+  color: #ffffff;
+
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.sidebarBottom {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.logout:hover {
+  color: #dc2626;
+}
+
+.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.disabled:hover {
+  background: transparent;
+  color: inherit;
+}
+
+.menuLabel {
+  flex: 1;
+  text-align: left;
+}
+
+.comingSoonBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 6px;
+  border-radius: 4px;
+  background: #ff0101;
+  color: #f1f3f6;
+  font-size: 10px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 70px;
+    padding: 15px 10px;
+  }
+
+  .sidebarBrand {
+    justify-content: center;
+    padding: 5px 0 25px;
+  }
+
+  .sidebarBrand > div:last-child,
+  .menuTitle,
+  .menuItem span,
+  .menuBadge {
+    display: none;
+  }
+
+  .menuItem {
+    justify-content: center;
+    padding: 0;
+  }
+}
+

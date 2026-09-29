@@ -1,0 +1,173 @@
+.tableCard {
+  margin-top: 16px;
+  background: #ffffff;
+  border: 1px solid #e8ebf0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 19px;
+  border-bottom: 1px solid #f0f1f4;
+}
+
+.cardHeader h3 {
+  color: #293247;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.cardHeader p {
+  margin-top: 4px;
+  color: #9299a9;
+  font-size: 10px;
+}
+
+.viewAllButton {
+  border: 0;
+  background: transparent;
+  color: #2563eb;
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.viewAllButton:hover {
+  color: #1d4ed8;
+}
+
+.tableWrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th {
+  padding: 11px 19px;
+  background: #fafbfc;
+  color: #9299a9;
+  font-size: 9px;
+  font-weight: 600;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.table td {
+  padding: 13px 19px;
+  border-top: 1px solid #f0f1f4;
+  color: #596276;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.table tbody tr {
+  transition: background 0.15s ease;
+}
+
+.table tbody tr:hover {
+  background: #fafbfc;
+}
+
+.requestId {
+  color: #293247;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.productName {
+  color: #293247;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.quantity {
+  color: #596276;
+  font-weight: 500;
+}
+
+.requester {
+  color: #596276;
+}
+
+.date {
+  color: #9299a9;
+}
+
+/* Status */
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 7px;
+  border-radius: 5px;
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.pending {
+  background: #fff7ed;
+  color: #ea580c;
+}
+
+.accepted {
+  background: #ecfdf5;
+  color: #059669;
+}
+
+.rejected {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+/* Action */
+
+.detailButton {
+  padding: 5px 9px;
+  border: 1px solid #e1e5eb;
+  border-radius: 5px;
+  background: #ffffff;
+  color: #596276;
+  font-size: 9px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.detailButton:hover {
+  border-color: #2563eb;
+  color: #2563eb;
+  background: #eff6ff;
+}
+
+@media (max-width: 768px) {
+  .cardHeader {
+    padding: 16px;
+  }
+
+  .table th,
+  .table td {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+}
+
+@media (max-width: 550px) {
+  .tableCard {
+    border-radius: 8px;
+  }
+
+  .cardHeader {
+    padding: 15px;
+  }
+
+  .table th,
+  .table td {
+    padding: 11px 12px;
+  }
+}
