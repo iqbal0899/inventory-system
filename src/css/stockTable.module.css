@@ -2,32 +2,36 @@
   width: 100%;
 }
 
+.stock,
 .status {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 5px 10px;
   border-radius: 999px;
   font-size: 11px;
   font-weight: 600;
 }
 
-.pending {
-  color: #b45309;
-  background: #fef3c7;
+.stock {
+  min-width: 34px;
+  padding: 4px 8px;
 }
 
-.approved {
+.status {
+  padding: 5px 10px;
+}
+
+.available {
   color: #15803d;
   background: #dcfce7;
 }
 
-.rejected {
-  color: #dc2626;
-  background: #fee2e2;
+.low {
+  color: #b45309;
+  background: #fef3c7;
 }
 
-.completed {
-  color: #1769d1;
-  background: #dbeafe;
+.empty {
+  color: #dc2626;
+  background: #fee2e2;
 }

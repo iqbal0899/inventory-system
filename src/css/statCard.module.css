@@ -69,6 +69,18 @@
   color: #dc2626;
 }
 
+.statContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  min-width: 0;
+}
+
+.statContent :global(.container) {
+  justify-content: flex-start;
+}
+
 @media (max-width: 550px) {
   .statCard {
     padding: 16px;

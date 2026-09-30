@@ -1,0 +1,45 @@
+.page {
+  min-height: 100%;
+  padding: 28px;
+  background: #f8fafc;
+}
+
+.header {
+  margin-bottom: 22px;
+}
+
+.header h1 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.header p {
+  margin: 6px 0 0;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.card {
+  max-width: 900px;
+  padding: 24px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+}
+
+@media (max-width: 640px) {
+  .page {
+    padding: 18px;
+  }
+
+  .card {
+    padding: 18px;
+  }
+
+  .header h1 {
+    font-size: 22px;
+  }
+}

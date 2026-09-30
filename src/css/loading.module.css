@@ -1,0 +1,39 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  color: #64748b;
+
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.spinner {
+  animation: spin 0.8s linear infinite;
+}
+
+.fullPage {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(255, 255, 255, 0.8);
+
+  backdrop-filter: blur(2px);
+}
+
+.loading {
+  justify-content: flex-start;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

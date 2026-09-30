@@ -1,0 +1,35 @@
+.page {
+  min-height: 100%;
+  padding: 28px;
+  background: #f8fafc;
+}
+
+.detail {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.item span {
+  color: #64748b;
+  font-size: 12px;
+}
+
+.item strong {
+  color: #0f172a;
+  font-size: 14px;
+}
+
+@media (max-width: 640px) {
+  .page {
+    padding: 18px;
+  }
+}

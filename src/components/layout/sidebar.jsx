@@ -11,52 +11,61 @@ import {
   LogOut,
 } from "lucide-react";
 
+import { useNavigate, useLocation } from "react-router-dom";
+
 import styles from "../../css/sidebar.module.css";
 
 const menuItems = [
   {
     label: "Dashboard",
     icon: LayoutDashboard,
-    active: true,
+    path: "/dashboard",
   },
   {
     label: "Produk",
     icon: Package,
-    comingSoon: true,
+    path: "/products",
   },
   {
     label: "Stok",
     icon: Boxes,
-    comingSoon: true,
+    path: "/stock",
   },
   {
     label: "Permintaan Kasir",
     icon: ClipboardList,
-    comingSoon: true,
+    path: "/requests",
   },
   {
     label: "Supplier",
     icon: Truck,
-    comingSoon: true,
+    path: "/suppliers",
   },
   {
     label: "Pembelian",
     icon: ShoppingCart,
-    comingSoon: true,
+    path: "/purchases",
   },
   {
     label: "Laporan",
     icon: FileText,
-    comingSoon: true,
+    path: "/reports",
   },
   {
     label: "Audit Log",
     icon: History,
-    comingSoon: true,
+    path: "/audit-logs",
   },
 ];
 
 function Sidebar() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleLogout = () => {
+    navigate("/login");
+  };
+
   return (
     <aside className={styles.sidebar}>
       <div className={styles.sidebarBrand}>
@@ -74,27 +83,22 @@ function Sidebar() {
         <nav className={styles.sidebarMenu}>
           {menuItems.map((item) => {
             const Icon = item.icon;
+            const isActive = location.pathname === item.path;
 
             return (
               <button
                 key={item.label}
                 type="button"
-                disabled={item.comingSoon}
+                onClick={() => navigate(item.path)}
                 className={`${styles.menuItem} ${
-                  item.active ? styles.active : ""
-                } ${item.comingSoon ? styles.disabled : ""}`}
+                  isActive ? styles.active : ""
+                }`}
               >
                 <Icon size={19} strokeWidth={1.8} />
 
                 <span className={styles.menuLabel}>
                   {item.label}
                 </span>
-
-                {item.comingSoon && (
-                  <span className={styles.comingSoonBadge}>
-                    Segera Hadir
-                  </span>
-                )}
               </button>
             );
           })}
@@ -102,16 +106,21 @@ function Sidebar() {
       </div>
 
       <div className={styles.sidebarBottom}>
-        <button type="button" className={styles.menuItem}>
-          <Settings size={19} />
+        <button
+          type="button"
+          className={styles.menuItem}
+          onClick={() => navigate("/settings")}
+        >
+          <Settings size={19} strokeWidth={1.8} />
           <span>Pengaturan</span>
         </button>
 
         <button
           type="button"
           className={`${styles.menuItem} ${styles.logout}`}
+          onClick={handleLogout}
         >
-          <LogOut size={19} />
+          <LogOut size={19} strokeWidth={1.8} />
           <span>Logout</span>
         </button>
       </div>

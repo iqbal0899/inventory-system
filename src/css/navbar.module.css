@@ -1,25 +1,41 @@
 .navbar {
+  position: fixed;
+  top: 0;
+  left: 250px;
+  right: 0;
+
+  z-index: 1000;
+
   height: 70px;
 
   display: flex;
   align-items: center;
   justify-content: space-between;
 
+  gap: 20px;
   padding: 0 30px;
+
+  box-sizing: border-box;
 
   background: #ffffff;
   border-bottom: 1px solid #e8ebf0;
 }
 
 .search {
-  width: 360px;
-  height: 38px;
-
   display: flex;
   align-items: center;
+
   gap: 9px;
 
+  flex: 1;
+  width: 100%;
+  max-width: 360px;
+  min-width: 0;
+
+  height: 38px;
+
   padding: 0 12px;
+  box-sizing: border-box;
 
   border: 1px solid #e3e6ec;
   border-radius: 8px;
@@ -28,7 +44,13 @@
 }
 
 .search input {
+  flex: 1;
   width: 100%;
+  min-width: 0;
+
+  height: 100%;
+
+  padding: 0;
 
   border: 0;
   outline: none;
@@ -39,26 +61,54 @@
   font-size: 12px;
 }
 
+.search input::placeholder {
+  color: #9aa1b2;
+}
+
+.search:focus-within {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
+}
+
 .actions {
   display: flex;
   align-items: center;
+
   gap: 20px;
+
+  flex-shrink: 0;
 }
 
 .notificationButton {
   position: relative;
 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 36px;
+  height: 36px;
+
+  padding: 0;
+
   border: 0;
+
   background: transparent;
 
   color: #697386;
+
+  cursor: pointer;
+}
+
+.notificationButton:hover {
+  color: #2563eb;
 }
 
 .notificationDot {
   position: absolute;
 
-  top: -2px;
-  right: -1px;
+  top: 3px;
+  right: 3px;
 
   width: 7px;
   height: 7px;
@@ -66,25 +116,32 @@
   border-radius: 50%;
 
   background: #ef4444;
-  border: 2px solid white;
+
+  border: 2px solid #ffffff;
 }
 
 .userProfile {
   display: flex;
   align-items: center;
+
   gap: 9px;
 
+  min-width: 0;
+
   padding-left: 18px;
+
   border-left: 1px solid #e8ebf0;
 }
 
 .avatar {
-  width: 35px;
-  height: 35px;
-
   display: flex;
   align-items: center;
   justify-content: center;
+
+  flex-shrink: 0;
+
+  width: 35px;
+  height: 35px;
 
   border-radius: 50%;
 
@@ -98,25 +155,43 @@
 .userInfo {
   display: flex;
   flex-direction: column;
+
   gap: 3px;
+
+  min-width: 0;
 }
 
 .userInfo strong {
+  overflow: hidden;
+
+  color: #172033;
+
   font-size: 11px;
+  font-weight: 600;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .userInfo span {
+  overflow: hidden;
+
   color: #9299a9;
+
   font-size: 10px;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 @media (max-width: 768px) {
   .navbar {
+    left: 0;
     padding: 0 18px;
   }
 
   .search {
-    width: 220px;
+    max-width: 360px;
   }
 
   .userInfo {
@@ -125,8 +200,20 @@
 }
 
 @media (max-width: 550px) {
+  .navbar {
+    gap: 12px;
+    padding: 0 14px;
+  }
+
   .search {
-    width: 160px;
+    max-width: none;
+  }
+
+  .actions {
+    gap: 8px;
+  }
+
+  .userProfile {
+    display: none;
   }
 }
-
