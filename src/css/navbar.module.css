@@ -1,197 +1,254 @@
 .navbar {
-  position: fixed;
-  top: 0;
-  left: 250px;
-  right: 0;
-
-  z-index: 1000;
-
+  width: 100%;
   height: 70px;
 
   display: flex;
   align-items: center;
   justify-content: space-between;
 
-  gap: 20px;
   padding: 0 30px;
-
-  box-sizing: border-box;
 
   background: #ffffff;
   border-bottom: 1px solid #e8ebf0;
+
+  box-sizing: border-box;
 }
 
 .search {
+  width: 320px;
+  height: 38px;
+
   display: flex;
   align-items: center;
 
   gap: 9px;
 
-  flex: 1;
-  width: 100%;
-  max-width: 360px;
-  min-width: 0;
-
-  height: 38px;
-
   padding: 0 12px;
-  box-sizing: border-box;
 
-  border: 1px solid #e3e6ec;
+  border: 1px solid #e3e7ed;
   border-radius: 8px;
 
-  color: #9aa1b2;
+  background: #f8f9fb;
+  color: #8b93a4;
+
+  box-sizing: border-box;
 }
 
 .search input {
-  flex: 1;
   width: 100%;
-  min-width: 0;
-
-  height: 100%;
-
-  padding: 0;
 
   border: 0;
   outline: none;
 
   background: transparent;
 
-  color: #172033;
+  color: #293247;
+
+  font-family: inherit;
   font-size: 12px;
 }
 
 .search input::placeholder {
-  color: #9aa1b2;
-}
-
-.search:focus-within {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
+  color: #a0a7b5;
 }
 
 .actions {
   display: flex;
   align-items: center;
-
-  gap: 20px;
-
-  flex-shrink: 0;
+  gap: 18px;
 }
 
 .notificationButton {
   position: relative;
 
+  width: 38px;
+  height: 38px;
+
   display: flex;
   align-items: center;
   justify-content: center;
 
-  width: 36px;
-  height: 36px;
-
-  padding: 0;
-
   border: 0;
+  border-radius: 8px;
 
   background: transparent;
-
-  color: #697386;
+  color: #687186;
 
   cursor: pointer;
+
+  transition: 0.2s ease;
 }
 
 .notificationButton:hover {
+  background: #f4f6fa;
   color: #2563eb;
 }
 
 .notificationDot {
   position: absolute;
 
-  top: 3px;
-  right: 3px;
+  top: 7px;
+  right: 7px;
 
   width: 7px;
   height: 7px;
 
+  border: 2px solid #ffffff;
   border-radius: 50%;
 
   background: #ef4444;
+}
 
-  border: 2px solid #ffffff;
+.profileWrapper {
+  position: relative;
 }
 
 .userProfile {
   display: flex;
   align-items: center;
 
-  gap: 9px;
+  gap: 10px;
 
-  min-width: 0;
+  padding: 6px 8px;
 
-  padding-left: 18px;
+  border: 0;
+  border-radius: 10px;
 
-  border-left: 1px solid #e8ebf0;
+  background: transparent;
+
+  cursor: pointer;
+
+  transition: background 0.2s ease;
+}
+
+.userProfile:hover {
+  background: #f5f7fa;
 }
 
 .avatar {
+  width: 36px;
+  height: 36px;
+
   display: flex;
   align-items: center;
   justify-content: center;
 
   flex-shrink: 0;
 
-  width: 35px;
-  height: 35px;
-
   border-radius: 50%;
 
-  background: #e8f0ff;
+  background: #eff5ff;
   color: #2563eb;
 
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
 }
 
 .userInfo {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
 
-  gap: 3px;
-
-  min-width: 0;
+  min-width: 130px;
 }
 
 .userInfo strong {
-  overflow: hidden;
+  color: #293247;
 
-  color: #172033;
-
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 600;
-
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .userInfo span {
-  overflow: hidden;
+  margin-top: 2px;
 
-  color: #9299a9;
+  color: #8b93a4;
 
   font-size: 10px;
+}
 
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.chevronOpen {
+  transform: rotate(180deg);
+
+  transition: transform 0.2s ease;
+}
+
+.profileMenu {
+  position: absolute;
+
+  top: calc(100% + 10px);
+  right: 0;
+
+  width: 190px;
+
+  padding: 6px;
+
+  background: #ffffff;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+
+  z-index: 1000;
+}
+
+.menuItem {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 10px 12px;
+
+  border: 0;
+  border-radius: 8px;
+
+  background: transparent;
+
+  color: #596276;
+
+  font-family: inherit;
+  font-size: 13px;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition: background 0.2s ease;
+}
+
+.menuItem:hover {
+  background: #f5f7fa;
+}
+
+.menuDivider {
+  height: 1px;
+
+  margin: 5px 0;
+
+  background: #e5e7eb;
+}
+
+.logoutItem {
+  color: #dc2626;
+}
+
+.logoutItem:hover {
+  background: #fef2f2;
 }
 
 @media (max-width: 768px) {
   .navbar {
-    left: 0;
-    padding: 0 18px;
+    height: 64px;
+
+    padding: 0 20px;
   }
 
   .search {
-    max-width: 360px;
+    width: 240px;
   }
 
   .userInfo {
@@ -201,12 +258,13 @@
 
 @media (max-width: 550px) {
   .navbar {
-    gap: 12px;
-    padding: 0 14px;
+    padding: 0 15px;
   }
 
   .search {
-    max-width: none;
+    width: auto;
+    flex: 1;
+    max-width: 220px;
   }
 
   .actions {
@@ -214,6 +272,10 @@
   }
 
   .userProfile {
+    padding: 4px;
+  }
+
+  .userProfile > svg {
     display: none;
   }
 }

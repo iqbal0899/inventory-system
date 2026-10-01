@@ -12,6 +12,8 @@ import Navbar from "../../components/layout/navbar";
 import styles from "../../css/stock.module.css";
 
 function Stock() {
+  const [collapsed, setCollapsed] = useState(false);
+
   const [products] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -47,10 +49,18 @@ function Stock() {
 
   return (
     <div className={styles.layout}>
-      <Navbar />
-      <Sidebar />
+      <Sidebar
+        collapsed={collapsed}
+        setCollapsed={setCollapsed}
+      />
 
-      <div className={styles.mainContent}>
+      <div
+        className={`${styles.mainContent} ${
+          collapsed ? styles.collapsed : ""
+        }`}
+      >
+        <Navbar />
+
         <main className={styles.page}>
           <div className={styles.header}>
             <div>
@@ -99,7 +109,9 @@ function Stock() {
 
                 <div>
                   <span>Kode</span>
-                  <strong>{selectedProduct.code || "-"}</strong>
+                  <strong>
+                    {selectedProduct.code || "-"}
+                  </strong>
                 </div>
 
                 <div>

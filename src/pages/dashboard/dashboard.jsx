@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import {
   Package,
   Boxes,
@@ -14,15 +16,23 @@ import RequestTable from "../../components/dashboard/requestTable";
 import LowStock from "../../components/dashboard/lowStock";
 
 function Dashboard() {
+  const [collapsed, setCollapsed] = useState(false);
+
   return (
     <div className={styles.appLayout}>
-      <Sidebar />
+      <Sidebar
+        collapsed={collapsed}
+        setCollapsed={setCollapsed}
+      />
 
-      <div className={styles.mainWrapper}>
+      <div
+        className={`${styles.mainWrapper} ${
+          collapsed ? styles.collapsed : ""
+        }`}
+      >
         <Navbar />
 
         <main className={styles.dashboard}>
-          {/* PAGE HEADING */}
           <div className={styles.pageHeading}>
             <div>
               <h1>Dashboard Inventory</h1>
@@ -37,7 +47,6 @@ function Dashboard() {
             </button>
           </div>
 
-          {/* STATISTICS */}
           <section className={styles.statsGrid}>
             <StatCard
               title="Total Produk"
@@ -72,9 +81,7 @@ function Dashboard() {
             />
           </section>
 
-          {/* CHART + LOW STOCK */}
           <section className={styles.contentGrid}>
-            {/* STOCK CHART */}
             <div className={styles.chartCard}>
               <div className={styles.cardHeader}>
                 <div>
@@ -127,11 +134,9 @@ function Dashboard() {
               </div>
             </div>
 
-            {/* LOW STOCK */}
             <LowStock />
           </section>
 
-          {/* REQUEST TABLE */}
           <RequestTable />
         </main>
       </div>

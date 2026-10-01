@@ -11,6 +11,8 @@ import Navbar from "../../components/layout/navbar";
 import styles from "../../css/products.module.css";
 
 function Products() {
+  const [collapsed, setCollapsed] = useState(false);
+
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
@@ -54,14 +56,23 @@ function Products() {
 
   return (
     <div className={styles.layout}>
-      <Navbar />
-      <Sidebar />
+      <Sidebar
+        collapsed={collapsed}
+        setCollapsed={setCollapsed}
+      />
 
-      <div className={styles.mainContent}>
+      <div
+        className={`${styles.mainContent} ${
+          collapsed ? styles.collapsed : ""
+        }`}
+      >
+        <Navbar />
+
         <main className={styles.page}>
           <div className={styles.header}>
             <div>
               <h1>Produk</h1>
+
               <p>
                 Kelola seluruh data produk inventory.
               </p>

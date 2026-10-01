@@ -1,4 +1,11 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+
+import { useAuth } from "./hooks/useAuth";
 
 import Login from "./pages/auth/login";
 import Dashboard from "./pages/dashboard/dashboard";
@@ -8,21 +15,114 @@ import Request from "./pages/requests/requests";
 import Supplier from "./pages/suppliers/suppliers";
 import Report from "./pages/reports/reports";
 
+function ProtectedRoute({ children }) {
+  const {
+    user,
+    loading,
+  } = useAuth();
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!user) {
+    return (
+      <Navigate
+        to="/login"
+        replace
+      />
+    );
+  }
+
+  return children;
+}
+
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/products" element={<Products />} />
-        <Route path="/stock" element={<Stock />} />
-        <Route path="/requests" element={<Request />} />
-        <Route path="/suppliers" element={<Supplier />} />
-        <Route path="/reports" element={<Report />} />
+        <Route
+          path="/"
+          element={
+            <Navigate
+              to="/login"
+              replace
+            />
+          }
+        />
+
+        <Route
+          path="/login"
+          element={<Login />}
+        />
+
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/products"
+          element={
+            <ProtectedRoute>
+              <Products />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/stock"
+          element={
+            <ProtectedRoute>
+              <Stock />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/requests"
+          element={
+            <ProtectedRoute>
+              <Request />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/suppliers"
+          element={
+            <ProtectedRoute>
+              <Supplier />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/reports"
+          element={
+            <ProtectedRoute>
+              <Report />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="*"
+          element={
+            <Navigate
+              to="/dashboard"
+              replace
+            />
+          }
+        />
       </Routes>
     </BrowserRouter>
   );
 }
 
 export default App;
+

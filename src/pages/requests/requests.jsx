@@ -11,6 +11,8 @@ import Navbar from "../../components/layout/navbar";
 import styles from "../../css/requests.module.css";
 
 function Requests() {
+  const [collapsed, setCollapsed] = useState(false);
+
   const [requests] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -44,14 +46,23 @@ function Requests() {
 
   return (
     <div className={styles.layout}>
-      <Navbar />
-      <Sidebar />
+      <Sidebar
+        collapsed={collapsed}
+        setCollapsed={setCollapsed}
+      />
 
-      <div className={styles.mainContent}>
+      <div
+        className={`${styles.mainContent} ${
+          collapsed ? styles.collapsed : ""
+        }`}
+      >
+        <Navbar />
+
         <main className={styles.page}>
           <div className={styles.header}>
             <div>
               <h1>Permintaan Stok</h1>
+
               <p>
                 Kelola permintaan stok dari pengguna.
               </p>

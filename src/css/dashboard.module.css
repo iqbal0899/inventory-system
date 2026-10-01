@@ -7,6 +7,15 @@
 .mainWrapper {
   width: calc(100% - 250px);
   margin-left: 250px;
+  min-height: 100vh;
+  transition:
+    width 0.25s ease,
+    margin-left 0.25s ease;
+}
+
+.mainWrapper.collapsed {
+  width: calc(100% - 72px);
+  margin-left: 72px;
 }
 
 .dashboard {
@@ -21,6 +30,7 @@
 }
 
 .pageHeading h1 {
+  margin: 0;
   font-size: 22px;
   font-weight: 700;
 }
@@ -73,6 +83,7 @@
 }
 
 .cardHeader h3 {
+  margin: 0;
   font-size: 13px;
   font-weight: 700;
 }
@@ -232,6 +243,11 @@
     margin-left: 70px;
   }
 
+  .mainWrapper.collapsed {
+    width: calc(100% - 70px);
+    margin-left: 70px;
+  }
+
   .dashboard {
     padding: 20px;
   }
@@ -250,5 +266,8 @@
   .dateButton {
     display: none;
   }
-}
 
+  .dashboard {
+    padding: 15px;
+  }
+}
