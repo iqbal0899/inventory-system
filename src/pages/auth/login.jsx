@@ -39,50 +39,55 @@ export default function Login() {
     }
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+ const handleSubmit = async (event) => {
+  event.preventDefault();
 
-    if (!formData.username.trim()) {
-      setError("Username wajib diisi.");
-      return;
-    }
+  if (!formData.username.trim()) {
+    setError("Username wajib diisi.");
+    return;
+  }
 
-    if (!formData.password) {
-      setError("Password wajib diisi.");
-      return;
-    }
+  if (!formData.password) {
+    setError("Password wajib diisi.");
+    return;
+  }
 
-    try {
-      setLoading(true);
-      setError("");
+  try {
+    setLoading(true);
+    setError("");
 
-      const response = await axiosApi.post("/auth/login", {
-        username: formData.username.trim(),
-        password: formData.password,
-      });
+    const response = await axiosApi.post("/auth/login", {
+      username: formData.username.trim(),
+      password: formData.password,
+    });
 
-      console.log("LOGIN SUCCESS:", response.data);
+    console.log("LOGIN RESPONSE:", response.data);
 
-      if (response.data.success) {
-        navigate("/dashboard", { replace: true });
-      } else {
-        setError(
-          response.data.message || "Login gagal."
-        );
-      }
-    } catch (error) {
-      console.error("LOGIN ERROR:", error);
-      console.error("ERROR RESPONSE:", error.response);
-      console.error("ERROR DATA:", error.response?.data);
-
+    if (!response.data.success) {
       setError(
-        error.response?.data?.message ||
-          "Terjadi kesalahan. Silakan coba lagi."
+        response.data.message || "Login gagal."
       );
-    } finally {
-      setLoading(false);
+      return;
     }
-  };
+
+    console.log("LOGIN BERHASIL");
+
+    navigate("/dashboard", {
+      replace: true,
+    });
+  } catch (error) {
+    console.error("LOGIN ERROR:", error);
+    console.error("ERROR RESPONSE:", error.response);
+    console.error("ERROR DATA:", error.response?.data);
+
+    setError(
+      error.response?.data?.message ||
+        "Terjadi kesalahan. Silakan coba lagi."
+    );
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <main className={styles.loginPage}>

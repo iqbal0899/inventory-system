@@ -13,6 +13,7 @@ import Products from "./pages/products/products";
 import Stock from "./pages/stock/stock";
 import Request from "./pages/requests/requests";
 import Supplier from "./pages/suppliers/suppliers";
+import SupplierDetail from "./pages/suppliers/supplierDetail";
 import Report from "./pages/reports/reports";
 
 function ProtectedRoute({ children }) {
@@ -41,6 +42,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* ROOT */}
         <Route
           path="/"
           element={
@@ -51,11 +53,13 @@ function App() {
           }
         />
 
+        {/* LOGIN */}
         <Route
           path="/login"
           element={<Login />}
         />
 
+        {/* DASHBOARD */}
         <Route
           path="/dashboard"
           element={
@@ -65,6 +69,7 @@ function App() {
           }
         />
 
+        {/* PRODUCTS */}
         <Route
           path="/products"
           element={
@@ -74,6 +79,7 @@ function App() {
           }
         />
 
+        {/* STOCK */}
         <Route
           path="/stock"
           element={
@@ -83,6 +89,7 @@ function App() {
           }
         />
 
+        {/* REQUESTS */}
         <Route
           path="/requests"
           element={
@@ -92,6 +99,7 @@ function App() {
           }
         />
 
+        {/* SUPPLIERS */}
         <Route
           path="/suppliers"
           element={
@@ -101,6 +109,17 @@ function App() {
           }
         />
 
+        {/* SUPPLIER DETAIL */}
+        <Route
+          path="/suppliers/:id"
+          element={
+            <ProtectedRoute>
+              <SupplierDetail />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* REPORTS */}
         <Route
           path="/reports"
           element={
@@ -110,6 +129,7 @@ function App() {
           }
         />
 
+        {/* NOT FOUND */}
         <Route
           path="*"
           element={
@@ -125,4 +145,3 @@ function App() {
 }
 
 export default App;
-

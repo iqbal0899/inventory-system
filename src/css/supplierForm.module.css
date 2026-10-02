@@ -1,0 +1,222 @@
+.form {
+  width: 100%;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.formGroup,
+.formGroupFull {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.formGroupFull {
+  grid-column: 1 / -1;
+}
+
+/* ========================================
+   LABEL
+======================================== */
+
+.formGroup label,
+.formGroupFull label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.required {
+  color: #dc2626;
+  margin-left: 2px;
+}
+
+/* ========================================
+   INPUT & TEXTAREA
+======================================== */
+
+.formGroup input,
+.formGroupFull input,
+.formGroup textarea,
+.formGroupFull textarea {
+  width: 100%;
+  box-sizing: border-box;
+
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+
+  background: #ffffff;
+  color: #0f172a;
+
+  font-family: inherit;
+  font-size: 14px;
+
+  outline: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+}
+
+/* INPUT */
+
+.formGroup input,
+.formGroupFull input {
+  height: 42px;
+  padding: 0 12px;
+}
+
+/* TEXTAREA */
+
+.formGroup textarea,
+.formGroupFull textarea {
+  min-height: 100px;
+  padding: 10px 12px;
+
+  line-height: 1.5;
+
+  resize: vertical;
+}
+
+/* ========================================
+   PLACEHOLDER
+======================================== */
+
+.formGroup input::placeholder,
+.formGroupFull input::placeholder,
+.formGroup textarea::placeholder,
+.formGroupFull textarea::placeholder {
+  color: #94a3b8;
+}
+
+/* ========================================
+   FOCUS
+======================================== */
+
+.formGroup input:focus,
+.formGroupFull input:focus,
+.formGroup textarea:focus,
+.formGroupFull textarea:focus {
+  border-color: #2563eb;
+
+  box-shadow: 0 0 0 3px rgb(37 99 235 / 10%);
+}
+
+/* ========================================
+   ERROR
+======================================== */
+
+.inputError {
+  border-color: #dc2626 !important;
+}
+
+.inputError:focus {
+  border-color: #dc2626 !important;
+
+  box-shadow: 0 0 0 3px rgb(220 38 38 / 10%);
+}
+
+.errorText {
+  color: #dc2626;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+/* ========================================
+   DISABLED
+======================================== */
+
+.formGroup input:disabled,
+.formGroupFull input:disabled,
+.formGroup textarea:disabled,
+.formGroupFull textarea:disabled {
+  background: #f1f5f9;
+  color: #64748b;
+  cursor: not-allowed;
+}
+
+.formGroup input:disabled::placeholder,
+.formGroupFull input:disabled::placeholder,
+.formGroup textarea:disabled::placeholder,
+.formGroupFull textarea:disabled::placeholder {
+  color: #cbd5e1;
+}
+
+/* ========================================
+   FORM ACTIONS
+======================================== */
+
+.formActions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: 10px;
+
+  margin-top: 24px;
+  padding-top: 18px;
+
+  border-top: 1px solid #e2e8f0;
+}
+
+/* ========================================
+   RESPONSIVE - TABLET
+======================================== */
+
+@media (max-width: 768px) {
+  .formGrid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .formGroupFull {
+    grid-column: auto;
+  }
+
+  .formActions {
+    margin-top: 20px;
+  }
+}
+
+/* ========================================
+   RESPONSIVE - MOBILE
+======================================== */
+
+@media (max-width: 480px) {
+  .formGrid {
+    gap: 14px;
+  }
+
+  .formGroup label,
+  .formGroupFull label {
+    font-size: 13px;
+  }
+
+  .formGroup input,
+  .formGroupFull input {
+    height: 40px;
+    font-size: 13px;
+  }
+
+  .formGroup textarea,
+  .formGroupFull textarea {
+    font-size: 13px;
+  }
+
+  .formActions {
+    flex-direction: column-reverse;
+    align-items: stretch;
+
+    gap: 8px;
+  }
+
+  .formActions button {
+    width: 100%;
+  }
+}
+

@@ -1,135 +1,234 @@
-import { useState } from "react";
-import { Plus, Edit, Eye, Trash2, RefreshCw } from "lucide-react";
+import { useEffect, useState } from "react";
+import {
+  Plus,
+  RefreshCw,
+} from "lucide-react";
 
 import Button from "../../components/common/button";
-import Table from "../../components/common/table";
 import Pagination from "../../components/common/pagination";
 import Loading from "../../components/common/loading";
-import Modal from "../../components/common/modal";
 
 import Sidebar from "../../components/layout/sidebar";
 import Navbar from "../../components/layout/navbar";
 
+import SupplierTable from "../../components/suppliers/supplierTable";
+import SupplierModal from "../../components/suppliers/SupplierModal";
+
+import {
+  getSuppliers,
+  createSupplier,
+  updateSupplier,
+  deleteSupplier,
+} from "../../services/supplierApi";
+
 import styles from "../../css/suppliers.module.css";
 
 function Suppliers() {
-  const [suppliers] = useState([]);
+  const [suppliers, setSuppliers] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   const [selectedSupplier, setSelectedSupplier] =
     useState(null);
 
-  const [modalOpen, setModalOpen] = useState(false);
+  const [modalOpen, setModalOpen] =
+    useState(false);
 
-  const [currentPage, setCurrentPage] = useState(1);
+  const [modalMode, setModalMode] =
+    useState("detail");
+
+  const [currentPage, setCurrentPage] =
+    useState(1);
+
   const totalPages = 1;
 
-  const columns = [
-    {
-      key: "code",
-      label: "Kode",
-      render: (supplier) => (
-        <strong>{supplier.code || "-"}</strong>
-      ),
-    },
-    {
-      key: "name",
-      label: "Supplier",
-      render: (supplier) =>
-        supplier.name || "-",
-    },
-    {
-      key: "phone",
-      label: "Telepon",
-      render: (supplier) =>
-        supplier.phone || "-",
-    },
-    {
-      key: "email",
-      label: "Email",
-      render: (supplier) =>
-        supplier.email || "-",
-    },
-    {
-      key: "address",
-      label: "Alamat",
-      render: (supplier) =>
-        supplier.address || "-",
-    },
-    {
-      key: "actions",
-      label: "Aksi",
-      align: "center",
-      render: (supplier) => (
-        <div className={styles.actions}>
-          <Button
-            type="button"
-            variant="ghost"
-            size="small"
-            icon={Eye}
-            onClick={() => {
-              setSelectedSupplier(supplier);
-              setModalOpen(true);
-            }}
-          />
+  // =========================
+  // LOAD SUPPLIERS
+  // =========================
 
-          <Button
-            type="button"
-            variant="ghost"
-            size="small"
-            icon={Edit}
-            onClick={() =>
-              console.log("Edit:", supplier)
-            }
-          />
+  const loadSuppliers = async () => {
+    try {
+      setLoading(true);
 
-          <Button
-            type="button"
-            variant="ghost"
-            size="small"
-            icon={Trash2}
-            onClick={() =>
-              console.log("Delete:", supplier)
-            }
-          />
-        </div>
-      ),
-    },
-  ];
+      const response = await getSuppliers();
+
+      if (response?.success) {
+        setSuppliers(response.data || []);
+      }
+    } catch (error) {
+      console.error(
+        "GET SUPPLIERS ERROR:",
+        error
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadSuppliers();
+  }, []);
+
+  // =========================
+  // ADD
+  // =========================
+
+  const handleAdd = () => {
+    setSelectedSupplier(null);
+    setModalMode("add");
+    setModalOpen(true);
+  };
+
+  // =========================
+  // VIEW
+  // =========================
+
+  const handleView = (supplier) => {
+    setSelectedSupplier(supplier);
+    setModalMode("detail");
+    setModalOpen(true);
+  };
+
+  // =========================
+  // EDIT
+  // =========================
+
+  const handleEdit = (supplier) => {
+    setSelectedSupplier(supplier);
+    setModalMode("edit");
+    setModalOpen(true);
+  };
+
+  // =========================
+  // SAVE
+  // =========================
+
+  const handleSubmit = async (data) => {
+    try {
+      setSaving(true);
+
+      let response;
+
+      if (
+        modalMode === "edit" &&
+        selectedSupplier
+      ) {
+        response = await updateSupplier(
+          selectedSupplier.id,
+          data
+        );
+      } else {
+        response = await createSupplier(data);
+      }
+
+      if (!response?.success) {
+        throw new Error(
+          response?.message ||
+            "Gagal menyimpan supplier"
+        );
+      }
+
+      setModalOpen(false);
+      setSelectedSupplier(null);
+
+      await loadSuppliers();
+    } catch (error) {
+      console.error(
+        "SAVE SUPPLIER ERROR:",
+        error
+      );
+
+      alert(
+        error?.response?.data?.message ||
+          error?.message ||
+          "Gagal menyimpan supplier"
+      );
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  // =========================
+  // DELETE
+  // =========================
+
+  const handleDelete = async (supplier) => {
+    const confirmed = window.confirm(
+      `Hapus supplier "${supplier.name}"?`
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+      await deleteSupplier(supplier.id);
+
+      await loadSuppliers();
+    } catch (error) {
+      console.error(
+        "DELETE SUPPLIER ERROR:",
+        error
+      );
+
+      alert(
+        error?.response?.data?.message ||
+          "Gagal menghapus supplier"
+      );
+    }
+  };
+
+  // =========================
+  // REFRESH
+  // =========================
 
   const handleRefresh = () => {
-    setLoading(true);
+    loadSuppliers();
+  };
 
-    setTimeout(() => {
-      setLoading(false);
-    }, 500);
+  // =========================
+  // CLOSE MODAL
+  // =========================
+
+  const handleCloseModal = () => {
+    if (saving) {
+      return;
+    }
+
+    setModalOpen(false);
+    setSelectedSupplier(null);
   };
 
   return (
     <div className={styles.layout}>
-      {/* Navbar */}
+      {/* NAVBAR */}
       <Navbar />
 
-      {/* Sidebar */}
+      {/* SIDEBAR */}
       <Sidebar />
 
-      {/* Main Content */}
+      {/* MAIN CONTENT */}
       <div className={styles.mainContent}>
         <main className={styles.page}>
+          {/* HEADER */}
           <div className={styles.header}>
             <div>
               <h1>Supplier</h1>
+
               <p>
                 Kelola data supplier inventory.
               </p>
             </div>
 
-            <div className={styles.headerActions}>
+            <div
+              className={styles.headerActions}
+            >
               <Button
                 type="button"
                 variant="outline"
                 icon={RefreshCw}
                 onClick={handleRefresh}
+                disabled={loading}
               >
                 Refresh
               </Button>
@@ -138,12 +237,14 @@ function Suppliers() {
                 type="button"
                 variant="primary"
                 icon={Plus}
+                onClick={handleAdd}
               >
                 Tambah Supplier
               </Button>
             </div>
           </div>
 
+          {/* TABLE */}
           {loading ? (
             <Loading
               size="medium"
@@ -151,12 +252,12 @@ function Suppliers() {
             />
           ) : (
             <>
-              <Table
-                columns={columns}
-                data={suppliers}
+              <SupplierTable
+                suppliers={suppliers}
                 loading={loading}
-                emptyMessage="Belum ada supplier."
-                rowKey="id"
+                onView={handleView}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
               />
 
               <Pagination
@@ -167,51 +268,15 @@ function Suppliers() {
             </>
           )}
 
-          <Modal
+          {/* SUPPLIER MODAL */}
+          <SupplierModal
             isOpen={modalOpen}
-            onClose={() => setModalOpen(false)}
-            title="Detail Supplier"
-            size="medium"
-          >
-            {selectedSupplier && (
-              <div className={styles.detail}>
-                <div>
-                  <span>Kode</span>
-                  <strong>
-                    {selectedSupplier.code || "-"}
-                  </strong>
-                </div>
-
-                <div>
-                  <span>Nama</span>
-                  <strong>
-                    {selectedSupplier.name || "-"}
-                  </strong>
-                </div>
-
-                <div>
-                  <span>Telepon</span>
-                  <strong>
-                    {selectedSupplier.phone || "-"}
-                  </strong>
-                </div>
-
-                <div>
-                  <span>Email</span>
-                  <strong>
-                    {selectedSupplier.email || "-"}
-                  </strong>
-                </div>
-
-                <div>
-                  <span>Alamat</span>
-                  <strong>
-                    {selectedSupplier.address || "-"}
-                  </strong>
-                </div>
-              </div>
-            )}
-          </Modal>
+            onClose={handleCloseModal}
+            mode={modalMode}
+            supplier={selectedSupplier}
+            onSubmit={handleSubmit}
+            loading={saving}
+          />
         </main>
       </div>
     </div>
@@ -219,3 +284,4 @@ function Suppliers() {
 }
 
 export default Suppliers;
+
