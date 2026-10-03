@@ -72,19 +72,25 @@ function ProductTable({
       ),
     },
     {
-      key: "status",
-      label: "Status",
-      align: "center",
-      render: (product) => (
-        <span
-          className={`${styles.status} ${
-            product.isActive ? styles.active : styles.inactive
-          }`}
-        >
-          {product.isActive ? "Aktif" : "Nonaktif"}
-        </span>
-      ),
-    },
+  key: "status",
+  label: "Status",
+  align: "center",
+  render: (product) => {
+    const isActive = product.status === "ACTIVE";
+
+    return (
+      <span
+        className={`${styles.status} ${
+          isActive
+            ? styles.active
+            : styles.inactive
+        }`}
+      >
+        {isActive ? "Aktif" : "Nonaktif"}
+      </span>
+    );
+  },
+},
     {
       key: "actions",
       label: "Aksi",

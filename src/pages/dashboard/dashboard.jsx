@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
   Package,
@@ -18,6 +18,181 @@ import LowStock from "../../components/dashboard/lowStock";
 function Dashboard() {
   const [collapsed, setCollapsed] = useState(false);
 
+  const [dashboardData, setDashboardData] = useState(null);
+
+  const [loading, setLoading] = useState(true);
+
+  const [error, setError] = useState("");
+
+  /**
+   * Ambil data dashboard dari API
+   */
+  const fetchDashboard = async () => {
+    try {
+      setLoading(true);
+      setError("");
+
+      const response = await fetch(
+        "http://localhost:5100/api/v1/dashboard",
+        {
+          method: "GET",
+          credentials: "include",
+          cache: "no-store",
+        }
+      );
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(
+          result.message ||
+            "Gagal mengambil data dashboard"
+        );
+      }
+
+      setDashboardData(result.data);
+    } catch (error) {
+      console.error(
+        "Fetch dashboard error:",
+        error
+      );
+
+      setError(
+        error.message ||
+          "Gagal mengambil data dashboard"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  /**
+   * Fetch pertama kali ketika halaman dibuka
+   */
+  useEffect(() => {
+    fetchDashboard();
+  }, []);
+
+  /**
+   * Loading
+   */
+  if (loading) {
+    return (
+      <div className={styles.appLayout}>
+        <Sidebar
+          collapsed={collapsed}
+          setCollapsed={setCollapsed}
+        />
+
+        <div
+          className={`${styles.mainWrapper} ${
+            collapsed ? styles.collapsed : ""
+          }`}
+        >
+          <Navbar />
+
+          <main className={styles.dashboard}>
+            <div className={styles.pageHeading}>
+              <div>
+                <h1>Dashboard Inventory</h1>
+
+                <p>
+                  Memuat data dashboard...
+                </p>
+              </div>
+            </div>
+
+            <div className={styles.loading}>
+              Memuat data...
+            </div>
+          </main>
+        </div>
+      </div>
+    );
+  }
+
+  /**
+   * Error
+   */
+  if (error) {
+    return (
+      <div className={styles.appLayout}>
+        <Sidebar
+          collapsed={collapsed}
+          setCollapsed={setCollapsed}
+        />
+
+        <div
+          className={`${styles.mainWrapper} ${
+            collapsed ? styles.collapsed : ""
+          }`}
+        >
+          <Navbar />
+
+          <main className={styles.dashboard}>
+            <div className={styles.pageHeading}>
+              <div>
+                <h1>Dashboard Inventory</h1>
+
+                <p>
+                  Pantau stok dan aktivitas inventory
+                  secara real-time.
+                </p>
+              </div>
+            </div>
+
+            <div className={styles.error}>
+              <p>{error}</p>
+
+              <button
+                onClick={fetchDashboard}
+                type="button"
+              >
+                Coba Lagi
+              </button>
+            </div>
+          </main>
+        </div>
+      </div>
+    );
+  }
+
+  /**
+   * Data dari API
+   */
+  const statistics =
+    dashboardData?.statistics || {};
+
+  const stockMovement =
+    dashboardData?.stockMovement || [];
+
+  const lowStockProducts =
+    dashboardData?.lowStockProducts || [];
+
+  const recentRequests =
+    dashboardData?.recentRequests || [];
+
+  /**
+   * Format angka
+   */
+  const formatNumber = (value) => {
+    return new Intl.NumberFormat("id-ID").format(
+      Number(value) || 0
+    );
+  };
+
+  /**
+   * Tanggal hari ini
+   */
+  const currentDate = new Intl.DateTimeFormat(
+    "id-ID",
+    {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    }
+  ).format(new Date());
+
   return (
     <div className={styles.appLayout}>
       <Sidebar
@@ -33,111 +208,225 @@ function Dashboard() {
         <Navbar />
 
         <main className={styles.dashboard}>
+          {/* =========================
+              HEADER
+          ========================== */}
           <div className={styles.pageHeading}>
             <div>
               <h1>Dashboard Inventory</h1>
 
               <p>
-                Pantau stok dan aktivitas inventory secara real-time.
+                Pantau stok dan aktivitas inventory
+                secara real-time.
               </p>
             </div>
 
-            <button className={styles.dateButton}>
-              29 September 2026
+            <button
+              className={styles.dateButton}
+              type="button"
+            >
+              {currentDate}
             </button>
           </div>
 
+          {/* =========================
+              STATISTICS
+          ========================== */}
           <section className={styles.statsGrid}>
             <StatCard
               title="Total Produk"
-              value="1,248"
-              description="+12 produk bulan ini"
-              icon={<Package size={22} />}
+              value={formatNumber(
+                statistics.totalProducts
+              )}
+              description="Produk aktif"
+              icon={
+                <Package size={22} />
+              }
               iconClass="blue"
             />
 
             <StatCard
               title="Total Stok"
-              value="18,420"
+              value={formatNumber(
+                statistics.totalStock
+              )}
               description="Unit tersedia"
-              icon={<Boxes size={22} />}
+              icon={
+                <Boxes size={22} />
+              }
               iconClass="green"
             />
 
             <StatCard
               title="Permintaan Pending"
-              value="24"
+              value={formatNumber(
+                statistics.pendingRequests
+              )}
               description="Menunggu persetujuan"
-              icon={<ClipboardList size={22} />}
+              icon={
+                <ClipboardList size={22} />
+              }
               iconClass="orange"
             />
 
             <StatCard
               title="Stok Menipis"
-              value="18"
+              value={formatNumber(
+                statistics.lowStock
+              )}
               description="Perlu segera direstock"
-              icon={<AlertTriangle size={22} />}
+              icon={
+                <AlertTriangle size={22} />
+              }
               iconClass="red"
             />
           </section>
 
+          {/* =========================
+              CONTENT
+          ========================== */}
           <section className={styles.contentGrid}>
+            {/* =====================
+                STOCK MOVEMENT
+            ====================== */}
             <div className={styles.chartCard}>
               <div className={styles.cardHeader}>
                 <div>
-                  <h3>Pergerakan Stok</h3>
+                  <h3>
+                    Pergerakan Stok
+                  </h3>
 
                   <p>
                     Aktivitas stok 7 hari terakhir
                   </p>
                 </div>
 
-                <select>
-                  <option>7 Hari</option>
-                  <option>30 Hari</option>
-                  <option>3 Bulan</option>
+                <select defaultValue="7">
+                  <option value="7">
+                    7 Hari
+                  </option>
+
+                  <option value="30">
+                    30 Hari
+                  </option>
+
+                  <option value="90">
+                    3 Bulan
+                  </option>
                 </select>
               </div>
 
               <div className={styles.chart}>
-                <div className={styles.chartBars}>
-                  {[45, 65, 50, 80, 60, 90, 72].map(
-                    (height, index) => (
-                      <div
-                        className={styles.barWrapper}
-                        key={index}
-                      >
-                        <div
-                          className={styles.bar}
-                          style={{
-                            height: `${height}%`,
-                          }}
-                        />
+                <div
+                  className={
+                    styles.chartBars
+                  }
+                >
+                  {stockMovement.map(
+                    (movement) => {
+                      const maxValue =
+                        Math.max(
+                          ...stockMovement.map(
+                            (item) =>
+                              Math.max(
+                                Number(
+                                  item.stockIn
+                                ) || 0,
+                                Number(
+                                  item.stockOut
+                                ) || 0
+                              )
+                          ),
+                          1
+                        );
 
-                        <span>
-                          {
-                            [
-                              "Sen",
-                              "Sel",
-                              "Rab",
-                              "Kam",
-                              "Jum",
-                              "Sab",
-                              "Min",
-                            ][index]
+                      const stockInHeight =
+                        ((Number(
+                          movement.stockIn
+                        ) || 0) /
+                          maxValue) *
+                        100;
+
+                      const stockOutHeight =
+                        ((Number(
+                          movement.stockOut
+                        ) || 0) /
+                          maxValue) *
+                        100;
+
+                      return (
+                        <div
+                          className={
+                            styles.barWrapper
                           }
-                        </span>
-                      </div>
-                    )
+                          key={
+                            movement.date
+                          }
+                        >
+                          <div
+                            className={
+                              styles.barGroup
+                            }
+                          >
+                            <div
+                              className={
+                                styles.bar
+                              }
+                              style={{
+                                height: `${Math.max(
+                                  stockInHeight,
+                                  2
+                                )}%`,
+                              }}
+                              title={`Stok masuk: ${formatNumber(
+                                movement.stockIn
+                              )}`}
+                            />
+
+                            <div
+                              className={
+                                styles.barOut
+                              }
+                              style={{
+                                height: `${Math.max(
+                                  stockOutHeight,
+                                  2
+                                )}%`,
+                              }}
+                              title={`Stok keluar: ${formatNumber(
+                                movement.stockOut
+                              )}`}
+                            />
+                          </div>
+
+                          <span>
+                            {movement.day?.substring(
+                              0,
+                              3
+                            )}
+                          </span>
+                        </div>
+                      );
+                    }
                   )}
                 </div>
               </div>
             </div>
 
-            <LowStock />
+            {/* =====================
+                LOW STOCK
+            ====================== */}
+            <LowStock
+              products={lowStockProducts}
+            />
           </section>
 
-          <RequestTable />
+          {/* =========================
+              REQUEST TABLE
+          ========================== */}
+          <RequestTable
+            requests={recentRequests}
+          />
         </main>
       </div>
     </div>

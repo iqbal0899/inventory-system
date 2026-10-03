@@ -21,8 +21,8 @@ function StockAdjustment({
 
     const value = Number(quantity);
 
-    if (!value || value <= 0) {
-      setError("Jumlah stok harus lebih dari 0.");
+    if (!Number.isInteger(value) || value <= 0) {
+      setError("Jumlah stok harus berupa angka lebih dari 0.");
       return;
     }
 
@@ -31,11 +31,16 @@ function StockAdjustment({
       return;
     }
 
+    if (!product?.id) {
+      setError("Produk tidak ditemukan.");
+      return;
+    }
+
     onSubmit?.({
-      productId: product?.id,
+      productId: product.id,
       type,
       quantity: value,
-      reason,
+      note: reason.trim(),
     });
   };
 
@@ -55,7 +60,10 @@ function StockAdjustment({
       size="medium"
     >
       {loading ? (
-        <Loading size="medium" text="Memproses stok..." />
+        <Loading
+          size="medium"
+          text="Memproses stok..."
+        />
       ) : (
         <form
           className={styles.form}
@@ -85,10 +93,17 @@ function StockAdjustment({
             <select
               id="adjustmentType"
               value={type}
-              onChange={(event) => setType(event.target.value)}
+              onChange={(event) => {
+                setType(event.target.value);
+                setError("");
+              }}
             >
-              <option value="add">Tambah Stok</option>
-              <option value="subtract">Kurangi Stok</option>
+              <option value="add">
+                Tambah Stok
+              </option>
+              <option value="subtract">
+                Kurangi Stok
+              </option>
             </select>
           </div>
 
@@ -101,10 +116,12 @@ function StockAdjustment({
               id="quantity"
               type="number"
               min="1"
+              step="1"
               value={quantity}
-              onChange={(event) =>
-                setQuantity(event.target.value)
-              }
+              onChange={(event) => {
+                setQuantity(event.target.value);
+                setError("");
+              }}
               placeholder="Masukkan jumlah"
             />
           </div>
@@ -118,9 +135,10 @@ function StockAdjustment({
               id="reason"
               rows="4"
               value={reason}
-              onChange={(event) =>
-                setReason(event.target.value)
-              }
+              onChange={(event) => {
+                setReason(event.target.value);
+                setError("");
+              }}
               placeholder="Masukkan alasan penyesuaian"
             />
           </div>
@@ -130,6 +148,7 @@ function StockAdjustment({
               type="button"
               variant="outline"
               onClick={handleClose}
+              disabled={loading}
             >
               Batal
             </Button>

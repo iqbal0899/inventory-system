@@ -107,8 +107,7 @@ export async function getNextProductCode() {
 
 export async function createProduct(data) {
   try {
-    const formData =
-      new FormData();
+    const formData = new FormData();
 
     formData.append(
       "name",
@@ -145,6 +144,11 @@ export async function createProduct(data) {
       String(data.categoryId)
     );
 
+    formData.append(
+      "status",
+      data.status || "ACTIVE"
+    );
+
     if (data.supplierId) {
       formData.append(
         "supplierId",
@@ -152,9 +156,7 @@ export async function createProduct(data) {
       );
     }
 
-    if (
-      data.image instanceof File
-    ) {
+    if (data.image instanceof File) {
       formData.append(
         "image",
         data.image
@@ -165,21 +167,17 @@ export async function createProduct(data) {
       "CREATE PRODUCT FORM DATA:"
     );
 
-    for (
-      const [key, value]
-      of formData.entries()
-    ) {
+    for (const [key, value] of formData.entries()) {
       console.log(
         `${key}:`,
         value
       );
     }
 
-    const response =
-      await axiosApi.post(
-        "/products",
-        formData
-      );
+    const response = await axiosApi.post(
+      "/products",
+      formData
+    );
 
     console.log(
       "CREATE PRODUCT RESPONSE:",
@@ -253,6 +251,10 @@ export async function updateProduct(
       "categoryId",
       String(data.categoryId)
     );
+    formData.append(
+  "status",
+  data.status || "ACTIVE"
+);
 
     if (data.supplierId) {
       formData.append(

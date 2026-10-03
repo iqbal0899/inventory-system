@@ -1,6 +1,13 @@
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+
 import ProductForm from "../../components/products/productForm";
 import Loading from "../../components/common/loading";
+
+import {
+  getProductById,
+  updateProduct,
+} from "../../services/productApi";
 
 import styles from "../../css/editProduct.module.css";
 
@@ -8,23 +15,89 @@ function EditProduct() {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const loading = false;
-  const productLoading = false;
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [productLoading, setProductLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const product = {
-    id,
-    code: "",
-    name: "",
-    category: "",
-    price: "",
-    stock: 0,
-    image: "",
-    isActive: true,
-  };
+  useEffect(() => {
+    const loadProduct = async () => {
+      try {
+        setProductLoading(true);
+        setError("");
+
+        const response = await getProductById(id);
+
+        setProduct(response?.data || null);
+      } catch (error) {
+        console.error(
+          "GET PRODUCT ERROR:",
+          error
+        );
+
+        setError(
+          error?.response?.data?.message ||
+            error?.message ||
+            "Gagal mengambil data produk"
+        );
+      } finally {
+        setProductLoading(false);
+      }
+    };
+
+    if (id) {
+      loadProduct();
+    }
+  }, [id]);
 
   const handleSubmit = async (data) => {
-    console.log("Update product:", id, data);
-    navigate("/products");
+    try {
+      setLoading(true);
+      setError("");
+
+      console.log(
+        "UPDATE PRODUCT DATA:",
+        data
+      );
+
+      const response = await updateProduct(
+        id,
+        {
+          ...data,
+          status:
+            data.status === "ACTIVE"
+              ? "ACTIVE"
+              : "INACTIVE",
+        }
+      );
+
+      console.log(
+        "UPDATE PRODUCT RESPONSE:",
+        response
+      );
+
+      if (!response?.success) {
+        throw new Error(
+          response?.message ||
+            "Gagal memperbarui produk"
+        );
+      }
+
+      navigate("/products");
+    } catch (error) {
+      console.error(
+        "UPDATE PRODUCT ERROR:",
+        error
+      );
+
+      setError(
+        error?.response?.data?.message ||
+          error?.message ||
+          "Gagal memperbarui produk"
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (productLoading) {
@@ -33,6 +106,18 @@ function EditProduct() {
         fullPage
         text="Memuat data produk..."
       />
+    );
+  }
+
+  if (!product) {
+    return (
+      <main className={styles.page}>
+        <div className={styles.card}>
+          <p>
+            {error || "Produk tidak ditemukan."}
+          </p>
+        </div>
+      </main>
     );
   }
 
@@ -47,12 +132,20 @@ function EditProduct() {
         </div>
       </div>
 
+      {error && (
+        <div className={styles.error}>
+          {error}
+        </div>
+      )}
+
       <div className={styles.card}>
         <ProductForm
           initialData={product}
           loading={loading}
           onSubmit={handleSubmit}
-          onCancel={() => navigate("/products")}
+          onCancel={() =>
+            navigate("/products")
+          }
         />
       </div>
     </main>

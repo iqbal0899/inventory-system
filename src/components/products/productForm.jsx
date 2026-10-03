@@ -19,7 +19,7 @@ const initialForm = {
   minStock: "",
   unit: "pcs",
   image: null,
-  isActive: true,
+  status: "ACTIVE",
 };
 
 // =========================
@@ -136,8 +136,8 @@ function ProductForm({
 
         image: null,
 
-        isActive:
-          initialData.status === "ACTIVE",
+        status:
+          initialData.status || "ACTIVE",
       });
 
       setImagePreview(
@@ -276,41 +276,19 @@ function ProductForm({
     // =========================
 
     const productData = {
-      name:
-        formData.name.trim(),
-
-      description:
-        formData.description.trim(),
-
-      category:
-        formData.category,
-
-      supplierId:
-        formData.supplierId
-          ? Number(
-              formData.supplierId
-            )
-          : null,
-
-      price:
-        Number(formData.price),
-
-      stock:
-        Number(
-          formData.stock || 0
-        ),
-
-      minStock:
-        Number(
-          formData.minStock || 0
-        ),
-
-      unit:
-        formData.unit || "pcs",
-
-      image:
-        formData.image,
-    };
+  name: formData.name.trim(),
+  description: formData.description.trim(),
+  category: formData.category,
+  supplierId: formData.supplierId
+    ? Number(formData.supplierId)
+    : null,
+  price: Number(formData.price),
+  stock: Number(formData.stock || 0),
+  minStock: Number(formData.minStock || 0),
+  unit: formData.unit || "pcs",
+  status: formData.status,
+  image: formData.image,
+};
 
     console.log(
       "PRODUCT DATA:",
@@ -744,15 +722,20 @@ function ProductForm({
         }
       >
         <input
-          type="checkbox"
-          name="isActive"
-          checked={
-            formData.isActive
-          }
-          onChange={
-            handleChange
-          }
-        />
+  type="checkbox"
+  name="status"
+  checked={formData.status === "ACTIVE"}
+  onChange={(event) => {
+    setFormData((previous) => ({
+      ...previous,
+      status: event.target.checked
+        ? "ACTIVE"
+        : "INACTIVE",
+    }));
+
+    setError("");
+  }}
+/>
 
         <span>
           Produk aktif

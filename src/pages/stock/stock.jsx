@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { RefreshCw, SlidersHorizontal } from "lucide-react";
 
 import Button from "../../components/common/button";
@@ -9,20 +9,60 @@ import StockAdjustment from "../../components/stock/stockAdjusment";
 import Sidebar from "../../components/layout/sidebar";
 import Navbar from "../../components/layout/navbar";
 
+import {
+  getStocks,
+  stockIn,
+  stockOut,
+} from "../../services/stockApi";
+
 import styles from "../../css/stock.module.css";
 
 function Stock() {
   const [collapsed, setCollapsed] = useState(false);
 
-  const [products] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [adjustmentLoading, setAdjustmentLoading] =
+    useState(false);
+  const [error, setError] = useState("");
 
-  const [selectedProduct, setSelectedProduct] = useState(null);
-  const [adjustmentOpen, setAdjustmentOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] =
+    useState(null);
+  const [adjustmentOpen, setAdjustmentOpen] =
+    useState(false);
   const [detailOpen, setDetailOpen] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = 1;
+  const itemsPerPage = 10;
+
+  const totalPages = Math.max(
+    1,
+    Math.ceil(products.length / itemsPerPage)
+  );
+
+  const loadStocks = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError("");
+
+      const response = await getStocks();
+
+      setProducts(response?.data || []);
+    } catch (error) {
+      console.error("Gagal mengambil data stok:", error);
+
+      setError(
+        error?.response?.data?.message ||
+          "Gagal memuat data stok."
+      );
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadStocks();
+  }, [loadStocks]);
 
   const handleView = (product) => {
     setSelectedProduct(product);
@@ -34,17 +74,48 @@ function Stock() {
     setAdjustmentOpen(true);
   };
 
-  const handleSubmitAdjustment = (data) => {
-    console.log("Stock adjustment:", data);
-    setAdjustmentOpen(false);
+  const handleSubmitAdjustment = async (data) => {
+    try {
+      setAdjustmentLoading(true);
+      setError("");
+
+      if (data.type === "add") {
+        await stockIn(data.productId, {
+          quantity: data.quantity,
+          note: data.note,
+        });
+      } else {
+        await stockOut(data.productId, {
+          quantity: data.quantity,
+          note: data.note,
+        });
+      }
+
+      setAdjustmentOpen(false);
+      setSelectedProduct(null);
+
+      await loadStocks();
+    } catch (error) {
+      console.error(
+        "Gagal melakukan penyesuaian stok:",
+        error
+      );
+
+      setError(
+        error?.response?.data?.message ||
+          "Gagal melakukan penyesuaian stok."
+      );
+    } finally {
+      setAdjustmentLoading(false);
+    }
   };
 
-  const handleRefresh = () => {
-    setLoading(true);
+  const handleRefresh = async () => {
+    await loadStocks();
+  };
 
-    setTimeout(() => {
-      setLoading(false);
-    }, 500);
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
   };
 
   return (
@@ -65,7 +136,9 @@ function Stock() {
           <div className={styles.header}>
             <div>
               <h1>Stok</h1>
-              <p>Pantau dan sesuaikan stok produk.</p>
+              <p>
+                Pantau dan sesuaikan stok produk.
+              </p>
             </div>
 
             <Button
@@ -73,10 +146,17 @@ function Stock() {
               variant="outline"
               icon={RefreshCw}
               onClick={handleRefresh}
+              loading={loading}
             >
               Refresh
             </Button>
           </div>
+
+          {error && (
+            <div className={styles.error}>
+              {error}
+            </div>
+          )}
 
           {loading ? (
             <Loading
@@ -89,7 +169,7 @@ function Stock() {
               loading={loading}
               currentPage={currentPage}
               totalPages={totalPages}
-              onPageChange={setCurrentPage}
+              onPageChange={handlePageChange}
               onView={handleView}
             />
           )}
@@ -104,7 +184,9 @@ function Stock() {
               <div className={styles.detail}>
                 <div>
                   <span>Produk</span>
-                  <strong>{selectedProduct.name}</strong>
+                  <strong>
+                    {selectedProduct.name}
+                  </strong>
                 </div>
 
                 <div>
@@ -136,9 +218,13 @@ function Stock() {
 
           <StockAdjustment
             isOpen={adjustmentOpen}
-            onClose={() => setAdjustmentOpen(false)}
+            onClose={() => {
+              if (!adjustmentLoading) {
+                setAdjustmentOpen(false);
+              }
+            }}
             product={selectedProduct}
-            loading={false}
+            loading={adjustmentLoading}
             onSubmit={handleSubmitAdjustment}
           />
         </main>
